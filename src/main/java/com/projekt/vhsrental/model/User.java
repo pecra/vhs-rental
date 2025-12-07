@@ -16,12 +16,12 @@ import lombok.Setter;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Integer userId;
 
     private String name;
 
-    @Column(unique = true)
+    @Column(unique = true,nullable = false)
     private String email;
 
 
