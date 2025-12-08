@@ -2,8 +2,6 @@ package com.projekt.vhsrental.model;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,32 +15,25 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "rentals")
-public class Rental {
+@Table(name = "reviews", uniqueConstraints = {@UniqueConstraint(columnNames = {"vhs_id","user_id"})})
+public class Review {
 
     @Id
     @GeneratedValue
-    private Integer rentalId;
-
+    private Integer reviewId;
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
     private User user;
 
-
-
     @ManyToOne
     @JoinColumn(name = "vhs_id",nullable = false)
     private VHS vhs;
 
+    private Integer rating;
 
-    private LocalDate rentalDate;
+    private String comment;
 
-    private LocalDate dueDate;
-
-    private LocalDate returnDate;
-
-    private BigDecimal fee;
-
+    private LocalDate reviewDate;
 
 }

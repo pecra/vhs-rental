@@ -41,4 +41,10 @@ public class UserService {
         return repo.save(user);
     }
 
+    public User findUserByEmail(String email) {
+        log.info("Finding user by email: {}", email);
+        return repo.findByEmail(email).orElseThrow(() -> new NotFoundException("user.not.found"));
+
+    }
+
 }

@@ -2,6 +2,8 @@ package com.projekt.vhsrental.controller;
 
 
 import com.projekt.vhsrental.model.VHS;
+import com.projekt.vhsrental.model.VHSDetailsDTO;
+import com.projekt.vhsrental.service.ReviewService;
 import com.projekt.vhsrental.service.VHSService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +18,13 @@ import java.util.List;
 public class VHSController {
 
     private VHSService serv;
+    private ReviewService reviewService;
 
-    public VHSController(VHSService serv) {
+
+    public VHSController(VHSService serv,  ReviewService reviewService) {
+
         this.serv = serv;
+        this.reviewService = reviewService;
     }
 
     @GetMapping
@@ -31,9 +37,15 @@ public class VHSController {
     @GetMapping("/{VHSId}")
     public VHS getVHSById(@PathVariable Integer VHSId) {
 
-
         log.debug("HTTP GET /api/vhs/{}", VHSId);
         return serv.getVHS(VHSId);
+    }
+
+    @GetMapping("/{VHSId}/details")
+    public VHSDetailsDTO getVHSDetailsById(@PathVariable Integer VHSId) {
+
+        log.debug("HTTP GET /api/vhs/{}/details", VHSId);
+        return serv.getVHSDetails(VHSId);
     }
 
     @PostMapping
