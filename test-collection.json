@@ -1,15 +1,30 @@
 {
   "info": {
-    "name": "VHS Rental API - Full Test Suite",
-    "description": "Complete collection for testing Users, VHS, Rentals (rent & return)",
+    "name": "VHS Rental API - Full Test Suite & Error Handling",
+    "description": "Kompletna kolekcija za testiranje Korisnika, VHS traka, Iznajmljivanja (rent & return), uključujući testiranje svih implementiranih iznimaka (400, 404, 409).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Setup",
+      "name": "Setup (Initialize Data)",
       "item": [
         {
-          "name": "Create User - Ana",
+          "name": "1. Create User - Ana (ID: 1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    pm.collectionVariables.set(\"userId\", jsonData.userId);",
+                  "    console.log(\"Set userId: \" + jsonData.userId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -30,7 +45,7 @@
           }
         },
         {
-          "name": "Create User - Marko",
+          "name": "2. Create User - Marko (ID: 2)",
           "request": {
             "method": "POST",
             "header": [
@@ -51,7 +66,22 @@
           }
         },
         {
-          "name": "Create VHS - Matrix",
+          "name": "3. Create VHS - Matrix (ID: 1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    pm.collectionVariables.set(\"vhsId\", jsonData.vhsId);",
+                  "    console.log(\"Set vhsId: \" + jsonData.vhsId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -72,7 +102,7 @@
           }
         },
         {
-          "name": "Create VHS - Titanic",
+          "name": "4. Create VHS - Titanic (ID: 2)",
           "request": {
             "method": "POST",
             "header": [
@@ -95,64 +125,25 @@
       ]
     },
     {
-      "name": "Users",
+      "name": "Successful Rentals",
       "item": [
         {
-          "name": "List Users",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/api/users",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "users"]
+          "name": "1. Rent VHS (Ana rents Matrix - Rental ID: 1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    pm.collectionVariables.set(\"rentalId\", jsonData.rentalId);",
+                  "    console.log(\"Set rentalId: \" + jsonData.rentalId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
             }
-          }
-        },
-        {
-          "name": "Get User by ID",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/api/users/{{userId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "users", "{{userId}}"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "VHS",
-      "item": [
-        {
-          "name": "List VHS",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/api/vhs",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "vhs"]
-            }
-          }
-        },
-        {
-          "name": "Get VHS by ID",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/api/vhs/{{vhsId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "vhs", "{{vhsId}}"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Rentals",
-      "item": [
-        {
-          "name": "Rent VHS (user 1 rents vhs 1)",
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -163,7 +154,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"userId\": 1,\n  \"vhsId\": 1\n}"
+              "raw": "{\n  \"userId\": {{userId}},\n  \"vhsId\": {{vhsId}}\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/rentals",
@@ -173,7 +164,7 @@
           }
         },
         {
-          "name": "List Rentals",
+          "name": "2. List All Rentals",
           "request": {
             "method": "GET",
             "url": {
@@ -184,24 +175,152 @@
           }
         },
         {
-          "name": "List Active Rentals",
+          "name": "3. Return Rental (ID: 1)",
           "request": {
-            "method": "GET",
+            "method": "POST",
             "url": {
-              "raw": "{{baseUrl}}/api/rentals/active",
+              "raw": "{{baseUrl}}/api/rentals/{{rentalId}}/return",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "rentals", "active"]
+              "path": ["api", "rentals", "{{rentalId}}", "return"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Error Scenarios (Validation & Business Logic)",
+      "item": [
+        {
+          "name": "E1: Email Already Exists (409 CONFLICT)",
+          "description": "Testira AlreadyExistsException / DataIntegrityViolationException - pokušaj stvaranja korisnika s već postojećim emailom (ana@example.com).",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Duplikat\",\n  \"email\": \"ana@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
             }
           }
         },
         {
-          "name": "Return Rental (rentalId = 1)",
+          "name": "E2: Invalid Input - Missing Name (400 BAD REQUEST)",
+          "description": "Testira MethodArgumentNotValidException - šalje DTO bez polja 'name' (potrebna Bean Validation).",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@validation.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "E3: User Not Found (404 NOT FOUND)",
+          "description": "Testira NotFoundException - dohvat nepostojećeg korisnika (ID 999).",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/users/999",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "999"]
+            }
+          }
+        },
+        {
+          "name": "E4: Rent VHS - Not Found (404 NOT FOUND)",
+          "description": "Testira NotFoundException - pokušaj rentanja s nepostojećim VHS ID-jem (ID 999).",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"vhsId\": 999\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rentals"]
+            }
+          }
+        },
+        {
+          "name": "E5: Forbidden Action - Rental Not Found (403 FORBIDDEN)",
+          "description": "Testira ForbiddenActionException ili NotFoundException - pokušaj vraćanja nepostojećeg najma (ID 999).",
           "request": {
             "method": "POST",
             "url": {
-              "raw": "{{baseUrl}}/api/rentals/1/return",
+              "raw": "{{baseUrl}}/api/rentals/999/return",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "rentals", "1", "return"]
+              "path": ["api", "rentals", "999", "return"]
+            }
+          }
+        },
+        {
+          "name": "E6: VHS Already Rented (409 CONFLICT)",
+          "description": "PRIPREMA: Iznajmi VHS 2 (Titanic).",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 2,\n  \"vhsId\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rentals"]
+            }
+          }
+        },
+        {
+          "name": "E7: VHS Already Rented - Test (409 CONFLICT)",
+          "description": "Testira AlreadyExistsException - pokušaj ponovnog iznajmljivanja VHS 2 dok je aktivan. (Ovisno o E6)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"vhsId\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rentals",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rentals"]
             }
           }
         }
@@ -211,15 +330,23 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:8081"
+      "value": "http://localhost:8081",
+      "type": "string"
     },
     {
       "key": "userId",
-      "value": "1"
+      "value": "1",
+      "type": "string"
     },
     {
       "key": "vhsId",
-      "value": "1"
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "rentalId",
+      "value": "1",
+      "type": "string"
     }
   ]
 }

@@ -1,8 +1,9 @@
-HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
+logs
 !**/src/main/**/target/
 !**/src/test/**/target/
+VHSRental.iml
 
 ### STS ###
 .apt_generated

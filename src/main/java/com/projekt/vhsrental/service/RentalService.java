@@ -1,12 +1,15 @@
 package com.projekt.vhsrental.service;
 
 
+import com.projekt.vhsrental.exception.ForbiddenActionException;
+import com.projekt.vhsrental.exception.NotFoundException;
 import com.projekt.vhsrental.model.Rental;
 import com.projekt.vhsrental.model.User;
 import com.projekt.vhsrental.model.VHS;
 import com.projekt.vhsrental.repository.RentalRepo;
 import com.projekt.vhsrental.repository.UserRepo;
 import com.projekt.vhsrental.repository.VHSRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,6 +17,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+@Slf4j
 @Service
 public class RentalService {
 
@@ -28,25 +32,30 @@ public class RentalService {
     }
 
     public List<Rental> getAllRentals(){
+        log.debug("Getting all rentals");
         return rentalRepo.findAll();
     }
 
     public List<Rental> getAllActiveRentals(){
+        log.debug("Getting all active rentals");
         return rentalRepo.findByReturnDateIsNull();
     }
 
     public Rental getRental(Integer rentalId){
+        log.info("Getting rental by ID {}", rentalId);
         return rentalRepo.findById(rentalId).orElse(null);
     }
 
     public Rental addRental(Integer vhsId, Integer userId){
 
-        User user = userRepo.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
+        log.info("Creating rental for user {} and vhs {}",userId, vhsId);
+        User user = userRepo.findById(userId).orElseThrow(() -> new NotFoundException("user.not.found"));
 
-        VHS vhs = vhsRepo.findById(vhsId).orElseThrow(() -> new IllegalArgumentException("VHS not found: " + vhsId));
+
+        VHS vhs = vhsRepo.findById(vhsId).orElseThrow(() -> new NotFoundException("vhs.not.found"));
 
         if (rentalRepo.existsByVhsAndReturnDateIsNull(vhs)) {
-            throw new IllegalStateException("VHS tape is currently rented out.");
+            throw new ForbiddenActionException("vhs.already.rented");
         }
 
         LocalDate now = LocalDate.now();
@@ -56,6 +65,7 @@ public class RentalService {
         rental.setUser(user);
         rental.setDueDate(now.plusDays(2));
 
+        log.info("Created rental {}", rental);
         return rentalRepo.save(rental);
 
 
@@ -63,10 +73,11 @@ public class RentalService {
 
     public Rental returnRental(Integer rentalId) {
 
-        Rental rental = rentalRepo.findById(rentalId).orElseThrow(() -> new IllegalArgumentException("Rental not found: " + rentalId));
+        log.info("Returning rental by ID {}", rentalId);
+        Rental rental = rentalRepo.findById(rentalId).orElseThrow(() -> new NotFoundException("rental.not.found"));
 
         if(!(rental.getReturnDate() == null)){
-            throw new IllegalStateException("Already returned!");
+            throw new ForbiddenActionException("vhs.not.rented");
         }
 
         LocalDate now = LocalDate.now();
@@ -74,8 +85,13 @@ public class RentalService {
 
         rental.setReturnDate(now);
         if(diff < 0){
-            rental.setFee(((float) Math.abs(diff)));
+            rental.setFee(BigDecimal.valueOf(Math.abs(diff)));
+            log.info("Rental returned late, fee: {}", rental.getFee() );
         }
+        else{
+            rental.setFee(BigDecimal.valueOf(0));
+        }
+
         return rentalRepo.save(rental);
 
 
