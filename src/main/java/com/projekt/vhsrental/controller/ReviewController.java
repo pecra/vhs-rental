@@ -26,7 +26,7 @@ public class ReviewController {
     public Review addReview(@RequestBody @Valid ReviewDTO reviewDTO) {
 
         log.debug("HTTP POST /api/reviews");
-        return serv.addReview(reviewDTO.getVhsId(), reviewDTO.getUserId(),reviewDTO.getRating(), reviewDTO.getMessage());
+        return serv.addReview(reviewDTO.getVhsId(), reviewDTO.getUserId(),reviewDTO.getRating(), reviewDTO.getComment());
     }
 
     @GetMapping("/vhs/{vhsId}")

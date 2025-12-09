@@ -34,5 +34,5 @@ public class ReviewDTO {
     private Integer rating;
 
     @Size(max = 500, message = "review.comment.max")
-    private String message;
+    private String comment;
 }

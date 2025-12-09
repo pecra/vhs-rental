@@ -19,7 +19,7 @@ import java.time.LocalDate;
 public class Review {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer reviewId;
 
     @ManyToOne

@@ -21,28 +21,28 @@ import java.time.LocalDate;
 public class Rental {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer rentalId;
-
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)
     private User user;
-
-
 
     @ManyToOne
     @JoinColumn(name = "vhs_id",nullable = false)
     private VHS vhs;
 
 
+    @Column(nullable = false)
     private LocalDate rentalDate;
 
+    @Column(nullable = false)
     private LocalDate dueDate;
 
     private LocalDate returnDate;
 
-    private BigDecimal fee;
+    @DecimalMin(value = "0.0", message = "rental.fee.min")
+    private BigDecimal lateFee;
 
 
 }

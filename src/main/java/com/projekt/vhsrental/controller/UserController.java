@@ -2,14 +2,11 @@ package com.projekt.vhsrental.controller;
 
 
 import com.projekt.vhsrental.model.User;
-import com.projekt.vhsrental.model.VHS;
 import com.projekt.vhsrental.service.UserService;
-import com.projekt.vhsrental.service.VHSService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,8 +50,7 @@ public class UserController {
     @PostMapping
     public User addUser(@RequestBody @Valid User user) {
 
-
-        log.debug("HTTP POST /api/rentals");
+        log.debug("HTTP POST /api/users");
         return serv.addUser(user);
     }
 

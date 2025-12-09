@@ -18,13 +18,9 @@ import java.util.List;
 public class VHSController {
 
     private VHSService serv;
-    private ReviewService reviewService;
-
 
     public VHSController(VHSService serv,  ReviewService reviewService) {
-
         this.serv = serv;
-        this.reviewService = reviewService;
     }
 
     @GetMapping

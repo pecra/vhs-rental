@@ -4,7 +4,10 @@ package com.projekt.vhsrental.service;
 import com.projekt.vhsrental.exception.NotFoundException;
 import com.projekt.vhsrental.model.VHS;
 import com.projekt.vhsrental.model.VHSDetailsDTO;
+import com.projekt.vhsrental.repository.RentalRepo;
+import com.projekt.vhsrental.repository.UserRepo;
 import com.projekt.vhsrental.repository.VHSRepo;
+import com.projekt.vhsrental.repository.WaitlistEntryRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +17,8 @@ import java.util.List;
 @Service
 public class VHSService {
 
-    private VHSRepo repo;
-    private  ReviewService reviewService;
+    private final VHSRepo repo;
+    private final ReviewService reviewService;
 
     public VHSService(VHSRepo repo, ReviewService reviewService) {
 
@@ -57,4 +60,20 @@ public class VHSService {
         return repo.save(vhs);
     }
 
+    @Slf4j
+    @Service
+    public class WaitlistEntryService {
+
+        private final WaitlistEntryRepo waitlistEntryRepo;
+        private final UserRepo userRepo;
+        private final VHSRepo vhsRepo;
+        private final RentalRepo rentalRepo;
+
+
+        public WaitlistEntryService(WaitlistEntryRepo waitlistRepo, UserRepo userRepo, VHSRepo vhsRepo, RentalRepo rentalRepo) {
+            this.waitlistEntryRepo = waitlistRepo;
+            this.userRepo = userRepo;
+            this.vhsRepo = vhsRepo;
+            this.rentalRepo = rentalRepo;
+        }}
 }

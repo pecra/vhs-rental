@@ -44,6 +44,13 @@ public class RentalController {
         return serv.getRental(rentalId);
     }
 
+    @GetMapping("/user/{userId}")
+    public List<Rental> getRentalsForUser(@PathVariable Integer userId) {
+
+        log.debug("HTTP GET /api/rentals/user/{}", userId);
+        return serv.getRentalsForUser(userId);
+    }
+
     @PostMapping
     public Rental addRental(@RequestBody @Valid RentalDTO dto) {
         log.debug("HTTP POST /api/rentals userId={} vhsId={}", dto.getUserId(), dto.getVhsId());
@@ -53,7 +60,7 @@ public class RentalController {
     @PostMapping("/return/{rentalId}")
     public Rental returnRental(@PathVariable Integer rentalId) {
 
-        log.debug("HTTP POST /api/return/{}", rentalId);
+        log.debug("HTTP POST /api/rentals/return/{}", rentalId);
         return serv.returnRental(rentalId);
     }
 

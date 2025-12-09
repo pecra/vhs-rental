@@ -2,9 +2,7 @@ package com.projekt.vhsrental.service;
 
 
 import com.projekt.vhsrental.exception.AlreadyExistsException;
-import com.projekt.vhsrental.exception.ForbiddenActionException;
 import com.projekt.vhsrental.exception.NotFoundException;
-import com.projekt.vhsrental.model.Rental;
 import com.projekt.vhsrental.model.Review;
 import com.projekt.vhsrental.model.User;
 import com.projekt.vhsrental.model.VHS;
@@ -14,18 +12,16 @@ import com.projekt.vhsrental.repository.VHSRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Slf4j
 @Service
 public class ReviewService {
 
-    private ReviewRepo reviewRepo;
-    private UserRepo userRepo;
-    private VHSRepo vhsRepo;
+    private final ReviewRepo reviewRepo;
+    private final UserRepo userRepo;
+    private final VHSRepo vhsRepo;
 
     public ReviewService(ReviewRepo reviewRepo, UserRepo userRepo, VHSRepo vhsRepo) {
         this.reviewRepo = reviewRepo;

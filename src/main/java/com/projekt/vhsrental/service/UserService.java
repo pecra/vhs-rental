@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private UserRepo repo;
+    private final UserRepo repo;
 
     public UserService(UserRepo repo) {
         this.repo = repo;
