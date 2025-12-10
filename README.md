@@ -47,7 +47,7 @@ This ensures that the same VHS cannot be simultaneously rented by multiple users
 once it is returned, it may be rented again immediately, even on the same day.
 
 Every rental has dueDate, when returnih a VHS -> if returned late a fee is applied, daily fee is 1 euro.
-DueDate is calculated as rentalDate +2 days except on friday, when it is +3 days since the store doesn't work on sundays.
+DueDate is calculated as rentalDate +2 days except on friday, when it is +3 days since the store doesn't work on Sundays.
 
 
 ## **API endpoints**
