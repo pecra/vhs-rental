@@ -16,4 +16,4 @@ public interface RentalRepo extends JpaRepository<Rental, Integer> {
 
     List<Rental> findByUser(User user);
 
-    boolean existsByVhs(VHS vhs);}
+    void deleteByVhs(VHS vhs);}

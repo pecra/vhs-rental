@@ -469,7 +469,7 @@
       "name": "Waitlist",
       "item": [
         {
-          "name": "Create rental - user 1 rents VHS 1 (prerequisite)",
+          "name": "Create rental - user 1 rents VHS 4 (prerequisite)",
           "request": {
             "method": "POST",
             "header": [
@@ -480,7 +480,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"userId\": 1,\n  \"vhsId\": 1\n}"
+              "raw": "{\n  \"userId\": 1,\n  \"vhsId\": 4\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/rentals",
@@ -495,7 +495,7 @@
           }
         },
         {
-          "name": "Add to waitlist user 3 waits for VHS 1",
+          "name": "Add to waitlist user 3 waits for VHS 4",
           "request": {
             "method": "POST",
             "header": [
@@ -506,7 +506,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"userId\": 3,\n  \"vhsId\": 1\n}"
+              "raw": "{\n  \"userId\": 3,\n  \"vhsId\": 4\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/waitlist",
@@ -521,7 +521,7 @@
           }
         },
         {
-          "name": "Add to waitlist user 4 waits for VHS 1",
+          "name": "Add to waitlist user 4 waits for VHS 4",
           "request": {
             "method": "POST",
             "header": [
@@ -532,7 +532,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"userId\": 4,\n  \"vhsId\": 1\n}"
+              "raw": "{\n  \"userId\": 4,\n  \"vhsId\": 4\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/waitlist",
@@ -547,12 +547,12 @@
           }
         },
         {
-          "name": "Get waitlist for VHS 1",
+          "name": "Get waitlist for VHS 4",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/waitlist/vhs/1",
+              "raw": "{{baseUrl}}/api/waitlist/vhs/4",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -584,12 +584,12 @@
           }
         },
         {
-          "name": "Get waitlist for VHS 1 after delete",
+          "name": "Get waitlist for VHS 4 after delete",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/waitlist/vhs/1",
+              "raw": "{{baseUrl}}/api/waitlist/vhs/4",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -597,18 +597,18 @@
                 "api",
                 "waitlist",
                 "vhs",
-                "1"
+                "4"
               ]
             }
           }
         },
         {
-          "name": "Return rental 1 while waitlist exists",
+          "name": "Return rental 3 while waitlist exists",
           "request": {
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/rentals/return/1",
+              "raw": "{{baseUrl}}/api/rentals/return/3",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -616,7 +616,7 @@
                 "api",
                 "rentals",
                 "return",
-                "1"
+                "3"
               ]
             }
           }

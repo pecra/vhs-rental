@@ -76,6 +76,8 @@ public class VHSService {
         }
         waitlistEntryRepo.deleteByVhs(vhs);
         reviewRepo.deleteByVhs(vhs);
+        rentalRepo.deleteByVhs(vhs);
         repo.delete(vhs);
+
     }
 }
