@@ -8,6 +8,7 @@ import com.projekt.vhsrental.model.VHSDetailsDTO;
 import com.projekt.vhsrental.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -64,11 +65,13 @@ public class VHSService {
         return repo.save(vhs);
     }
 
+    @Transactional
     public void deleteVHS(Integer vhsId) {
 
         log.info("Deleting VHS with id: {}", vhsId);
         VHS vhs = repo.findById(vhsId).orElseThrow(() -> new NotFoundException("vhs.not.found"));
-        if(rentalRepo.existsByVhs(vhs)){
+
+        if(rentalRepo.existsByVhsAndReturnDateIsNull(vhs)){
             throw new ForbiddenActionException("vhs.already.rented");
         }
         waitlistEntryRepo.deleteByVhs(vhs);
