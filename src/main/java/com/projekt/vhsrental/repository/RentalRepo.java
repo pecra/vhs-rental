@@ -15,4 +15,5 @@ public interface RentalRepo extends JpaRepository<Rental, Integer> {
     List<Rental> findByReturnDateIsNull();
 
     List<Rental> findByUser(User user);
-}
+
+    boolean existsByVhs(VHS vhs);}

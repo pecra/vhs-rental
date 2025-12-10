@@ -11,4 +11,6 @@ public interface ReviewRepo extends JpaRepository<Review, Integer> {
 
     boolean existsByVhsAndUser (VHS vhs, User user);
     List<Review> findAllByVhs (VHS vhs);
+    void deleteByVhs(VHS vhs);
+
 }

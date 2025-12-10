@@ -9,8 +9,10 @@ import java.util.List;
 
 public interface WaitlistEntryRepo extends JpaRepository<WaitlistEntry, Integer> {
 
-    List<WaitlistEntry> findByVhsOrderByCreatedAtAsc(VHS vhs);
+    List<WaitlistEntry> findByVhsOrderByAddedAtAsc(VHS vhs);
 
     boolean existsByUserAndVhs(User user, VHS vhs );
+
+    void deleteByVhs(VHS vhs);
 
 }

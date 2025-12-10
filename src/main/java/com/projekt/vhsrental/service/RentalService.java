@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -60,8 +61,6 @@ public class RentalService {
 
         log.info("Creating rental for user {} and vhs {}",userId, vhsId);
         User user = userRepo.findById(userId).orElseThrow(() -> new NotFoundException("user.not.found"));
-
-
         VHS vhs = vhsRepo.findById(vhsId).orElseThrow(() -> new NotFoundException("vhs.not.found"));
 
         if (rentalRepo.existsByVhsAndReturnDateIsNull(vhs)) {
@@ -69,11 +68,19 @@ public class RentalService {
         }
 
         LocalDate now = LocalDate.now();
+        LocalDate dueDate;
+
+        if (now.getDayOfWeek() == DayOfWeek.FRIDAY) {
+            dueDate = now.plusDays(3);
+        } else {
+            dueDate = now.plusDays(2);
+        }
+
         Rental rental = new Rental();
         rental.setRentalDate(now);
+        rental.setDueDate(dueDate);
         rental.setVhs(vhs);
         rental.setUser(user);
-        rental.setDueDate(now.plusDays(2));
 
         log.info("Created rental {}", rental);
         return rentalRepo.save(rental);
@@ -92,10 +99,10 @@ public class RentalService {
 
         LocalDate now = LocalDate.now();
         long diff = ChronoUnit.DAYS.between( rental.getDueDate(), now);
-
         rental.setReturnDate(now);
+
         if(diff > 0){
-            rental.setLateFee(BigDecimal.valueOf(diff));
+            rental.setLateFee(BigDecimal.valueOf(diff));  //1e po danu
             log.info("Rental returned late, fee: {}", rental.getLateFee() );
         }
         else{
@@ -104,7 +111,7 @@ public class RentalService {
 
         WaitlistEntry waitlist = waitlistEntryService.getNextInWaitlist(rental.getVhs());
         if(waitlist != null){
-            log.info("Rental ready for user {} with email {} on waitlist!",waitlist.getUser().getUserId(), waitlist.getUser().getEmail());
+            log.info("Notify user {} on email {} that VHS is available.",waitlist.getUser().getUserId(), waitlist.getUser().getEmail());
         }
 
         return rentalRepo.save(rental);

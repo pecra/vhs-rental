@@ -16,8 +16,7 @@ import java.util.List;
 @RequestMapping("/api/rentals")
 public class RentalController {
 
-    private RentalService serv;
-
+    private final RentalService serv;
 
     public RentalController(RentalService serv) {
         this.serv = serv;

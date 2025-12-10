@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -33,17 +35,20 @@ public class RentalServiceTest {
     private UserRepo userRepo;
     @Mock
     private VHSRepo vhsRepo;
+
     @InjectMocks
     private RentalService rentalService;
+    @Mock
+    private WaitlistEntryService  waitlistEntryService;
 
     @Nested
-    @DisplayName("Add Rental")
+    @DisplayName("Add Rental tests")
     class AddRentalTests{
 
         @Test
         @DisplayName("Should create rental successfully")
         void shouldCreateRentalSuccessfully(){
-            //Given
+
             Integer userId = 2;
             Integer vhsId = 2;
 
@@ -58,14 +63,43 @@ public class RentalServiceTest {
             when(rentalRepo.existsByVhsAndReturnDateIsNull(vhs)).thenReturn(false);
             when(rentalRepo.save(any(Rental.class))).thenAnswer(inv -> inv.getArgument(0));
 
-            // When
             Rental rental = rentalService.addRental(vhsId, userId);
 
-            // Then
             assertNotNull(rental);
             assertEquals(user, rental.getUser());
             assertEquals(vhs, rental.getVhs());
             assertEquals(rental.getRentalDate().plusDays(2), rental.getDueDate());
+        }
+
+        @Test
+        @DisplayName("Should set dueDate as friday + 3 ")
+        void shouldSetDueDateAsMonday(){
+
+            Integer userId = 3;
+            Integer vhsId = 3;
+            LocalDate friday = LocalDate.of(2025, 1, 10);
+
+            User user = new User();
+            user.setUserId(userId);
+
+            VHS vhs = new VHS();
+            vhs.setVhsId(vhsId);
+
+            try (MockedStatic<LocalDate> mocked = Mockito.mockStatic(LocalDate.class, Mockito.CALLS_REAL_METHODS)) {
+
+                mocked.when(LocalDate::now).thenReturn(friday);
+                when(userRepo.findById(userId)).thenReturn(Optional.of(user));
+                when(vhsRepo.findById(vhsId)).thenReturn(Optional.of(vhs));
+                when(rentalRepo.existsByVhsAndReturnDateIsNull(vhs)).thenReturn(false);
+                when(rentalRepo.save(any(Rental.class))).thenAnswer(inv -> inv.getArgument(0));
+
+                Rental rental = rentalService.addRental(vhsId, userId);
+
+                assertNotNull(rental);
+                assertEquals(user, rental.getUser());
+                assertEquals(vhs, rental.getVhs());
+                assertEquals(rental.getRentalDate().plusDays(3), rental.getDueDate());
+            }
         }
 
         @Test

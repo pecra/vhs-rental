@@ -1,13 +1,11 @@
 package com.projekt.vhsrental.service;
 
 
+import com.projekt.vhsrental.exception.ForbiddenActionException;
 import com.projekt.vhsrental.exception.NotFoundException;
 import com.projekt.vhsrental.model.VHS;
 import com.projekt.vhsrental.model.VHSDetailsDTO;
-import com.projekt.vhsrental.repository.RentalRepo;
-import com.projekt.vhsrental.repository.UserRepo;
-import com.projekt.vhsrental.repository.VHSRepo;
-import com.projekt.vhsrental.repository.WaitlistEntryRepo;
+import com.projekt.vhsrental.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +17,17 @@ public class VHSService {
 
     private final VHSRepo repo;
     private final ReviewService reviewService;
+    private final RentalRepo rentalRepo;
+    private final WaitlistEntryRepo waitlistEntryRepo;
+    private final ReviewRepo reviewRepo;
 
-    public VHSService(VHSRepo repo, ReviewService reviewService) {
+    public VHSService(VHSRepo repo, ReviewService reviewService, RentalRepo rentalRepo, WaitlistEntryRepo waitlistEntryRepo, ReviewRepo reviewRepo) {
 
         this.repo = repo;
         this.reviewService = reviewService;
+        this.rentalRepo = rentalRepo;
+        this.waitlistEntryRepo = waitlistEntryRepo;
+        this.reviewRepo = reviewRepo;
     }
 
     public List<VHS> getAllVHS() {
@@ -60,20 +64,15 @@ public class VHSService {
         return repo.save(vhs);
     }
 
-    @Slf4j
-    @Service
-    public class WaitlistEntryService {
+    public void deleteVHS(Integer vhsId) {
 
-        private final WaitlistEntryRepo waitlistEntryRepo;
-        private final UserRepo userRepo;
-        private final VHSRepo vhsRepo;
-        private final RentalRepo rentalRepo;
-
-
-        public WaitlistEntryService(WaitlistEntryRepo waitlistRepo, UserRepo userRepo, VHSRepo vhsRepo, RentalRepo rentalRepo) {
-            this.waitlistEntryRepo = waitlistRepo;
-            this.userRepo = userRepo;
-            this.vhsRepo = vhsRepo;
-            this.rentalRepo = rentalRepo;
-        }}
+        log.info("Deleting VHS with id: {}", vhsId);
+        VHS vhs = repo.findById(vhsId).orElseThrow(() -> new NotFoundException("vhs.not.found"));
+        if(rentalRepo.existsByVhs(vhs)){
+            throw new ForbiddenActionException("vhs.already.rented");
+        }
+        waitlistEntryRepo.deleteByVhs(vhs);
+        reviewRepo.deleteByVhs(vhs);
+        repo.delete(vhs);
+    }
 }

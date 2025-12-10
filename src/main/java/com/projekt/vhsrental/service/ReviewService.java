@@ -45,11 +45,10 @@ public class ReviewService {
             throw new AlreadyExistsException("review.already.exists");
         }
 
-        LocalDate now = LocalDate.now();
         Review review = new Review();
         review.setVhs(vhs);
         review.setUser(user);
-        review.setReviewDate(now);
+        review.setReviewDate(LocalDate.now());
         review.setRating(rating);
         review.setComment(comment);
 

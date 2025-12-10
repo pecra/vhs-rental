@@ -78,7 +78,7 @@ public class GlobalExceptionHandler {
 
         log.warn("DataIntegrityViolation: {}", exception.getMessage(), exception);
 
-        String mess = messageSource.getMessage("user.already.exists", null,exception.getMessage(), null);
+        String mess = messageSource.getMessage("already.exists", null,exception.getMessage(), null);
 
         HttpStatus status = HttpStatus.CONFLICT;
         return new ResponseEntity<>(new ErrorDTO(status, mess), status);

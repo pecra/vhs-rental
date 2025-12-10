@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "rentals", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "vhs_id"}))
+@Table(name = "waitlists", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "vhs_id"}))
 public class WaitlistEntry {
 
     @Id

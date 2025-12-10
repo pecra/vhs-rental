@@ -63,7 +63,7 @@ public class WaitlistEntryService {
 
         VHS vhs = vhsRepo.findById(vhsId).orElseThrow(() -> new NotFoundException("vhs.not.found"));
 
-        return waitlistEntryRepo.findByVhsOrderByCreatedAtAsc(vhs);
+        return waitlistEntryRepo.findByVhsOrderByAddedAtAsc(vhs);
 
     }
 
@@ -71,9 +71,17 @@ public class WaitlistEntryService {
 
         log.info("Getting first on the waitlist for VHS {}", vhs.getVhsId());
 
-        List<WaitlistEntry> list = waitlistEntryRepo.findByVhsOrderByCreatedAtAsc(vhs);
+        List<WaitlistEntry> list = waitlistEntryRepo.findByVhsOrderByAddedAtAsc(vhs);
 
         return list.isEmpty() ? null : list.get(0);
+    }
+
+    public void deleteWaitlistEntry(Integer waitlistId) {
+        log.info("Deleting waitlistEntry {}", waitlistId);
+
+        WaitlistEntry entry = waitlistEntryRepo.findById(waitlistId).orElseThrow(() -> new NotFoundException("waitlistEntry.not.found"));
+
+        waitlistEntryRepo.delete(entry);
     }
 
 

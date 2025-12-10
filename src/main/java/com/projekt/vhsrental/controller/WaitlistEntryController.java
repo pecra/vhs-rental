@@ -31,4 +31,10 @@ public class WaitlistEntryController {
         log.debug("HTTP GET /api/waitlist/vhs/{}", vhsId);
         return service.getWaitlistEntriesForVHS(vhsId);
     }
+
+    @DeleteMapping("{entryId}")
+    public void deleteWaitlistEntry(@PathVariable Integer entryId) {
+        log.debug("HTTP DELETE /api/waitlist/{}", entryId);
+        service.deleteWaitlistEntry(entryId);
+    }
 }

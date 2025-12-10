@@ -32,10 +32,11 @@ public class Rental {
     @JoinColumn(name = "vhs_id",nullable = false)
     private VHS vhs;
 
-
+    @NotNull(message = "rental.rentaldate.notnull")
     @Column(nullable = false)
     private LocalDate rentalDate;
 
+    @NotNull(message = "rental.duedate.notnull")
     @Column(nullable = false)
     private LocalDate dueDate;
 

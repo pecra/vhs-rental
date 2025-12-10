@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api/vhs")
 public class VHSController {
 
-    private VHSService serv;
+    private final VHSService serv;
 
     public VHSController(VHSService serv,  ReviewService reviewService) {
         this.serv = serv;
@@ -49,6 +49,13 @@ public class VHSController {
 
         log.debug("HTTP POST /api/vhs");
         return serv.addVHS(vhs);
+    }
+
+    @DeleteMapping("{vhsId}")
+    public void deleteVHS(@PathVariable Integer vhsId) {
+
+        log.debug("HTTP DELETE /api/vhs/{vhsId}");
+        serv.deleteVHS(vhsId);
     }
 
 }

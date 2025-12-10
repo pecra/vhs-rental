@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api/reviews")
 public class ReviewController {
 
-    private ReviewService serv;
+    private final ReviewService serv;
 
     public ReviewController(ReviewService serv) {
         this.serv = serv;
