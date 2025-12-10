@@ -60,7 +60,9 @@ base URL: /api
 | GET | /api/vhs | List all VHS tapes |
 | GET | /api/vhs/{id} | Get tape by ID |
 | GET | /api/vhs/{id}/details | Details + average rating |
-| GET | /api/vhs | Add new VHS |
+| POST | /api/vhs | Add new VHS |
+| DELETE | /api/vhs/{id} | Delete VHS |
+
 
 **Users**
 
@@ -78,6 +80,7 @@ base URL: /api
 | GET | /api/rentals | List all rentals |
 | GET | /api/rentals/{id} | Get rental |
 | GET | /api/rentals/active | List active rentals |
+| GET | /api/rentals/user/{id} | List rentals for user |
 | POST | /api/rentals | Create rental |
 | POST | /api/rentals/return/{id} | Return VHS |
 
@@ -87,6 +90,13 @@ base URL: /api
 | --- | --- | --- |
 | GET | /api/reviews/vhs/{id} | Reviews for VHS |
 | POST | /api/reviews | Add review (one per user per VHS) |
+
+**Waitlist**
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | /api/waitlist/vhs/{id} | Get waitlist for VHS |
+| POST | /api/waitlist | Add new waitlist entry |
+| DELETE | /api/waitlist/{id} | Delete waitlist entry |
 
 
 ## **Postman Collection**
