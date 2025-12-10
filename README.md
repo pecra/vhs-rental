@@ -42,7 +42,7 @@
    
    docker run -p 8081:8081 vhs-rental
 
-    #### **H2 Database Console**
+   **H2 database console**
    
    http://localhost:8081/h2-console
 
