@@ -203,7 +203,7 @@
           }
         },
         {
-          "name": "Delete VHS 1 after reviews",
+          "name": "Delete VHS 1 AFTER running all reviews",
           "request": {
             "method": "DELETE",
             "header": [],
