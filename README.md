@@ -29,6 +29,10 @@
    Password: (empty)
 
  ### **DOCKER**
+
+   **Build application JAR**
+
+   mvn clean package -DskipTests
    
    **Build docker image**
    
@@ -37,6 +41,17 @@
    **Run container**
    
    docker run -p 8081:8081 vhs-rental
+
+    #### **H2 Database Console**
+   
+   http://localhost:8081/h2-console
+
+
+   JDBC URL: jdbc:h2:mem:vhsdb
+   
+   User: sa
+   
+   Password: (empty)
 
 ## **Business logic**
 
