@@ -72,6 +72,8 @@ once it is returned, it may be rented again immediately, even on the same day.
 Every rental has dueDate, when returnih a VHS -> if returned late a fee is applied, daily fee is 1 euro.
 DueDate is calculated as rentalDate +2 days except on friday, when it is +3 days since the store doesn't work on Sundays.
 
+After returning VHS, first user on the waiting list should be notified (currently implemented to send notification in the log file)
+
 
 ## **API endpoints**
 
