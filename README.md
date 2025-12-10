@@ -52,8 +52,6 @@ DueDate is calculated as rentalDate +2 days except on friday, when it is +3 days
 
 ## **API endpoints**
 
-base URL: /api
-
 **VHS**
 | Method | Endpoint | Description |
 | --- | --- | --- |
