@@ -53,6 +53,14 @@
    
    Password: (empty)
 
+## **Running tests**
+
+To run all tests:
+**mvn test**
+
+To run tests without building the whole application:
+**mvn -DskipITs test**
+
 ## **Business logic**
 
 A VHS can be rented multiple times in a day but **only after it has been returned.**
