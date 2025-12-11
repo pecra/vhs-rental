@@ -74,6 +74,7 @@ DueDate is calculated as rentalDate +2 days except on friday, when it is +3 days
 
 After returning VHS, first user on the waiting list should be notified (currently implemented to send notification in the log file)
 
+Only VHS and waitlist entries can be deleted, deleting VHS deletes its reviews and waitlist and is possible only if there isn't an active rental.
 
 ## **API endpoints**
 
